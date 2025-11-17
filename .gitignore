@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Project
+config/homography_matrix.txt
+calibration_frame.jpg
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
