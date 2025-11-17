@@ -130,21 +130,29 @@ The codebase is intentionally small and opinionated; everything is centered arou
 
 traffic_monitor/
 ├── main.py # Orchestrates camera, detection, visualization
-│
+
 ├── config/
 │ └── homography_matrix.txt
-│
+
 ├── modules/
+
 │ ├── camera_manager.py # Picamera2 wrapper for Raspberry Pi 5
+
 │ ├── coordinate_system.py # Homography + zones + trigger lines
+
 │ ├── optical_flow_detector.py
+
 │ └── speed_calculator.py # Single‑vehicle state machine and speed estimation
-│
+
+
 ├── calibration/
+
 │ ├── capture_frame.py # One‑shot frame capture for calibration
+
 │ ├── A_B_points_road.py # Interactive marking of A/B points
+
 │ └── homography_final_calc.py # Computes homography matrix
-│
+
 └── images/ # Photos and screenshots used in this README
 
 
