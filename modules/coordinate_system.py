@@ -9,23 +9,21 @@ class CoordinateSystem:
         """Načte homografii a inicializuje souřadnicový systém"""
         self.H = np.loadtxt(homography_file)
         
-        # 🎯 NOVÉ - PRODLOUŽENÉ Trigger lines (pokrývají celou šířku včetně modrého obdélníku)
-        # START LINE: Prodloužená doleva a doprava
-        # END LINE: Prodloužená doleva a doprava
+    
         self.trigger_lines = {
             'start_line': {
-                'point1': (300, 750),   # Levý okraj (prodlouženo)
-                'point2': (600, 1280),  # Pravý okraj (prodlouženo)
+                'point1': (300, 750),   # Levý okraj 
+                'point2': (600, 1280),  # Pravý okraj 
                 'world_y': 0.0
             },
             'end_line': {
-                'point1': (900, 570),   # Levý okraj (prodlouženo)
-                'point2': (1600, 850),  # Pravý okraj (prodlouženo)
+                'point1': (900, 570),   # Levý okraj 
+                'point2': (1600, 850),  # Pravý okraj 
                 'world_y': 12.0
             }
         }
         
-        # 🎯 Pre-detection polygony (BEZE ZMĚNY)
+        
         self.predetection_polygon_1 = np.array([
             [1653, 582],
             [1480, 532],
@@ -40,7 +38,6 @@ class CoordinateSystem:
             [371, 1235]
         ], dtype=np.int32)
         
-        # 🎯 NOVÝ - MEASUREMENT ZONE (prostor mezi trigger lines)
         # Obdélník pokrývající celou oblast měření
         self.measurement_zone = np.array([
             [300, 750],    # START LINE levý
@@ -109,7 +106,6 @@ class CoordinateSystem:
         return False
     
     def is_in_measurement_zone(self, pixel_x, pixel_y):
-        """🎯 NOVÉ - Kontrola zda je bod v measurement zone (mezi trigger lines)"""
         point = (pixel_x, pixel_y)
         result = cv2.pointPolygonTest(self.measurement_zone, point, False)
         return result >= 0
@@ -123,5 +119,5 @@ class CoordinateSystem:
         return [self.predetection_polygon_1, self.predetection_polygon_2]
     
     def get_measurement_zone(self):
-        """🎯 NOVÉ - Vrátí measurement zone"""
         return self.measurement_zone
+
