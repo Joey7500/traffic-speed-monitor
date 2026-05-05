@@ -8,7 +8,7 @@ class SpeedCalculator:
         self.coord_system = coordinate_system
         
         # State machine pro měření
-        self.state = 'IDLE'  # IDLE, MEASURING, MEASURED
+        self.state = 'IDLE'  # IDLE, MEASURING, MEASURE
         
         # Data aktuálního vozidla
         self.current_vehicle = {
