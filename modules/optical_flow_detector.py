@@ -5,7 +5,6 @@ import numpy as np
 
 class OpticalFlowDetector:
     def __init__(self, coordinate_system):
-        """Optical flow based vehicle detector - ignoruje statické objekty"""
         self.coord_system = coordinate_system
         
         # Optical flow parameters
@@ -37,7 +36,6 @@ class OpticalFlowDetector:
         print("✓ Optical Flow Detector initialized")
     
     def detect_moving_vehicles(self, frame):
-        """Detekuje pouze POHYBUJÍCÍ SE vozidla pomocí optical flow"""
         gray = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
         
         # První frame - inicializace
@@ -77,7 +75,6 @@ class OpticalFlowDetector:
             
             # Zakresli do motion mapy pouze pokud je pohyb větší než threshold
             if magnitude > self.motion_threshold:
-                # 🎯 OPRAVA: Použij int() pro magnitude
                 cv2.circle(motion_magnitude, (int(a), int(b)), 15, int(magnitude * 10), -1)
         
         # Threshold a morfologické operace
