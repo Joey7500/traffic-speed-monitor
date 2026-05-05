@@ -9,19 +9,18 @@ from modules.speed_calculator import SpeedCalculator
 
 class TrafficMonitor:
     def __init__(self):
-        print("🚗 Initializing Traffic Monitor...")
-        print("   Using Optical Flow detection (ignores parked cars)")
+        print("Initializing Traffic Monitor...")
+        print("Using Optical Flow detection (ignores parked cars)")
         
         self.coord_system = CoordinateSystem()
         self.camera = CameraManager(fps=30, buffer_size=450)
         self.motion_detector = OpticalFlowDetector(self.coord_system)
         self.speed_calculator = SpeedCalculator(self.coord_system)
         
-        print("✅ Traffic Monitor initialized")
-        print("📝 Single vehicle mode - optical flow tracking\n")
+        print("Traffic Monitor initialized")
+        print("Single vehicle mode - optical flow tracking\n")
     
     def start_monitoring(self):
-        """Spustí hlavní monitoring loop"""
         print("🔄 Starting traffic monitoring...")
         print("   Press 'q' to quit\n")
         
@@ -31,13 +30,12 @@ class TrafficMonitor:
         try:
             self._monitoring_loop()
         except KeyboardInterrupt:
-            print("\n⚠️ Monitoring interrupted by user")
+            print("\n Monitoring interrupted by user")
         finally:
             self.camera.stop()
             self._print_summary()
     
     def _monitoring_loop(self):
-        """Monitoring loop s optical flow"""
         frame_count = 0
         
         while True:
@@ -75,7 +73,6 @@ class TrafficMonitor:
                 break
     
     def _draw_detection(self, frame, detection, speed_data):
-        """Vykreslí detekci na frame"""
         x, y, w, h = detection['bbox']
         center = detection['center']
         world_pos = detection['world_pos']
@@ -112,34 +109,32 @@ class TrafficMonitor:
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
     
     def _draw_zones(self, frame):
-        """Vykreslí všechny zóny"""
         trigger_lines = self.coord_system.get_trigger_line_coordinates()
         
-        # START LINE - červená (TLUSTÁ)
+        # START LINE - červená
         start_line = trigger_lines['start_line']
         cv2.line(frame, start_line['point1'], start_line['point2'], (0, 0, 255), 5)
         cv2.putText(frame, "START", 
                    (start_line['point1'][0]+20, start_line['point1'][1]-15),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 255), 3)
         
-        # END LINE - zelená (TLUSTÁ)
+        # END LINE - zelená 
         end_line = trigger_lines['end_line']
         cv2.line(frame, end_line['point1'], end_line['point2'], (0, 255, 0), 5)
         cv2.putText(frame, "END", 
                    (end_line['point1'][0]+20, end_line['point1'][1]-15),
                    cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 3)
         
-        # 🎯 MEASUREMENT ZONE - žlutý polygon (mezi trigger lines)
+        #  MEASUREMENT ZONE 
         measurement_zone = self.coord_system.get_measurement_zone()
         cv2.polylines(frame, [measurement_zone], isClosed=True, color=(0, 255, 255), thickness=3)
         
-        # Pre-detection polygony (modré - tenčí)
+        # Pre-detection polygony
         polygons = self.coord_system.get_predetection_polygons()
         for poly in polygons:
             cv2.polylines(frame, [poly], isClosed=True, color=(255, 0, 0), thickness=2)
     
     def _display_frame(self, frame, motion_mask, frame_count):
-        """Zobrazí framy"""
         self._draw_zones(frame)
         
         # Resize
@@ -170,7 +165,6 @@ class TrafficMonitor:
         cv2.imshow("Motion Detection (Optical Flow)", motion_resized)
     
     def _print_summary(self):
-        """Vypíše souhrn na konci"""
         print(f"\n{'='*60}")
         print(f"📊 MONITORING SUMMARY")
         print(f"{'='*60}")
