@@ -9,7 +9,7 @@ DETECTION_SETTINGS = {
     'min_vehicle_area': 3000,        # Menší pro 45° úhel
     'max_vehicle_area':25000,      # Maximum filtr
     'max_tracking_distance': 120,   # Větší kvůli rychlosti
-    'speed_limit_kmh': 30,         # Český limit v obci
+    'speed_limit_kmh': 30,         # Český limit v pesi zone
     'max_reasonable_speed': 45,    # Filtr nesmyslů
 }
 
