@@ -6,7 +6,6 @@ from pathlib import Path
 
 class CoordinateSystem:
     def __init__(self, homography_file="config/homography_matrix.txt"):
-        """Načte homografii a inicializuje souřadnicový systém"""
         self.H = np.loadtxt(homography_file)
         
     
@@ -51,17 +50,14 @@ class CoordinateSystem:
         print(f"✓ Pre-detection: 2 zones | Measurement: 1 zone")
         
     def pixel_to_world(self, pixel_x, pixel_y):
-        """Převede pixely na reálné metry pomocí homografie"""
         pixel_pt = np.array([[[pixel_x, pixel_y]]], dtype=np.float32)
         world_pt = cv2.perspectiveTransform(pixel_pt, self.H)
         return world_pt[0][0]
         
     def calculate_distance(self, pos1, pos2):
-        """Spočítá vzdálenost mezi dvěma body v metrech"""
         return np.sqrt((pos2[0] - pos1[0])**2 + (pos2[1] - pos1[1])**2)
     
     def point_line_distance(self, point, line_point1, line_point2):
-        """Vypočítá vzdálenost bodu od přímky"""
         x0, y0 = point
         x1, y1 = line_point1
         x2, y2 = line_point2
@@ -74,7 +70,6 @@ class CoordinateSystem:
         return distance
     
     def is_near_trigger_line(self, pixel_x, pixel_y, line_name='start_line', threshold=50):
-        """Kontrola zda je bod blízko trigger line"""
         line = self.trigger_lines[line_name]
         distance = self.point_line_distance(
             (pixel_x, pixel_y), 
@@ -84,7 +79,6 @@ class CoordinateSystem:
         return distance < threshold
     
     def which_trigger_line_crossed(self, pixel_x, pixel_y, threshold=50):
-        """Vrátí kterou trigger linii vozidlo překročilo"""
         if self.is_near_trigger_line(pixel_x, pixel_y, 'start_line', threshold):
             return 'start_line'
         elif self.is_near_trigger_line(pixel_x, pixel_y, 'end_line', threshold):
@@ -92,7 +86,6 @@ class CoordinateSystem:
         return None
     
     def is_in_predetection_area(self, pixel_x, pixel_y):
-        """Kontrola zda je bod v pre-detection zóně"""
         point = (pixel_x, pixel_y)
         
         result1 = cv2.pointPolygonTest(self.predetection_polygon_1, point, False)
@@ -111,11 +104,9 @@ class CoordinateSystem:
         return result >= 0
     
     def get_trigger_line_coordinates(self):
-        """Vrátí souřadnice trigger lines"""
         return self.trigger_lines
     
     def get_predetection_polygons(self):
-        """Vrátí pre-detection polygony"""
         return [self.predetection_polygon_1, self.predetection_polygon_2]
     
     def get_measurement_zone(self):
